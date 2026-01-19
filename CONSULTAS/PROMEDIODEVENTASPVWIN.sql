@@ -1,0 +1,59 @@
+---Revisar un promedio de las ventas por día y desplazamiento---
+SELECT TOP (1000) [TIPO]
+      ,[TRANSAC]
+      ,[FOLIO]
+      ,[CUENTA]
+      ,[REFERENCIA]
+      ,[FECHA_HORA]
+      ,[USUARIO]
+      ,[CANTIDAD]
+      ,[ARTICULO]
+      ,[DESCRIPCION]
+      ,[EXISTENCIA]
+      ,[MINIMO]
+      ,[MAXIMO]
+      ,[PCIO_COM]
+      ,[PCIO_VTA]
+      ,[IEPS]
+      ,[IVA]
+      ,[DESCUENTO]
+      ,[PUNTOS_PREMIO]
+      ,[EFECTIVO_PREMIO]
+      ,[PROMOCION]
+      ,[FP_EF]
+      ,[FP_DL]
+      ,[FP_TJ]
+      ,[FP_CH]
+      ,[FP_VL]
+      ,[FP_NT]
+      ,[FP_NI]
+      ,[FP_CR]
+      ,[IDENTIDAD]
+      ,[TERMINAL]
+      ,[COMENTARIOS]
+      ,[EDICION]
+      ,[EDICION_FYH]
+  FROM [FT_MAPELO].[dbo].[MOV]
+
+SELECT A.*,A.TOTAL/A.DIAS AS PROMEDIO FROM(SELECT 
+ARTICULO,
+DESCRIPCION,
+SUM(CANTIDAD) AS TOTAL,
+COUNT(DISTINCT(CAST([FECHA_HORA] AS DATE))) AS DIAS
+FROM [FT_MAPELO].[dbo].[MOV]
+WHERE DATENAME(weekday, [FECHA_HORA]) = 'MONDAY'
+AND TRANSAC IN ('VT','VR','VF')
+AND YEAR([FECHA_HORA]) = '2025'
+GROUP BY ARTICULO,DESCRIPCION
+)A
+ORDER BY TOTAL DESC
+
+SELECT 
+ARTICULO,
+DESCRIPCION,
+COMENTARIOS,
+CANTIDAD
+  FROM [FT_MAPELO].[dbo].[MOV]
+  WHERE TRANSAC = 'TE'
+  AND COMENTARIOS LIKE ('%MAPELO')
+  ORDER BY CAST([FECHA_HORA] AS DATE) DESC, CANTIDAD DESC

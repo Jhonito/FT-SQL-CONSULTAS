@@ -1,0 +1,5 @@
+EXEC [BIT].[dbo].[SUCURSAL_ACTUALIZAR_RESPALDO]
+---Variables---
+		@EMPRESA = 'FT',
+		@SUCURSAL = 'AGUILILLAS',
+		@BASE = 'ART'

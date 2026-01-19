@@ -1,0 +1,48 @@
+USE FT
+SELECT
+A.SUCURSAL,A.ARTICULO,A.DESCRIPCION, A.[CANTIDAD PATITO],B.EXISTENCIA, A.TRANSAC,B.GRUPO FROM
+ (
+    SELECT 
+            TRANSAC,
+            -- FOLIO,
+            -- REFERENCIA,
+            -- YEAR (FECHA_HORA) AS [2022],
+            SUCURSAL,
+            -- USUARIO,
+            ARTICULO,
+            DESCRIPCION,
+            -- PCIO_VTA,
+            -- COMENTARIOS,
+            SUM (CANTIDAD) AS [CANTIDAD PATITO]
+        FROM [FT_MAPELO].[DBO].[MOV]
+            WHERE TRANSAC IN ('VT','VR','VF')
+            AND YEAR(FECHA_HORA) = '2022'
+            AND EXISTENCIA >= '300'
+            GROUP BY TRANSAC, ARTICULO, DESCRIPCION, SUCURSAL
+            
+) A
+LEFT JOIN
+( 
+    SELECT 
+     ARTICULO,
+     EXISTENCIA, 
+     GRUPO,
+     DEPTO
+    FROM [FT_MAPELO].[DBO].[ART]
+    WHERE GRUPO IN ('PFIZ')
+    AND SUCURSAL = 'ALMACEN_MAPELO'
+) B
+ON A.ARTICULO = B.ARTICULO
+-- WHERE A.ARTICULO = '16' AND A.DESCRIPCION ='A GRANEL AZUCAR STANDAR 950GR'
+ORDER BY A.[CANTIDAD PATITO] DESC
+
+
+
+
+
+
+
+/////////////////////////////////////////////////
+
+
+            -- GROUP BY TRANSAC, ARTICULO, DESCRIPCION

@@ -1,0 +1,3 @@
+SELECT *
+FROM [FT].[dbo].[RECETAS]
+WHERE FOLIO = '609180';

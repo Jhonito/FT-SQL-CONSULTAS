@@ -1,0 +1,31 @@
+USE FT
+
+SELECT * FROM
+        (
+            SELECT
+                TIPO,
+                FOLIO,
+                REFERENCIA,
+                FECHA_HORA,
+                SUCURSAL,
+                USUARIO,
+                ARTICULO,
+                DESCRIPCION,
+                PCIO_VTA,
+                COMENTARIOS
+            FROM MOVIMIENTOS
+            WHERE TIPO IN ('SERVICIO','SERVICIO_CANCELADO','SERVICIO_ERROR','SERVICIO_PENDIENTE' )
+        )MOVIMIENTOS
+    LEFT JOIN
+        (
+            SELECT 
+            USUARIO AS 'USUARIO CANCELACION',
+            FOLIO
+            FROM MOVIMIENTOS
+            -- WHERE TIPO IN ('CANCELACION_SERVICIO')
+        )CANCELACION
+    ON MOVIMIENTOS.FOLIO = CANCELACION.FOLIO
+    -- WHERE MOVIMIENTOS.TIPO IN ('SERVICIO_PENDIENTE','SERVICIO_CANCELADO','SERVICIO')
+    -- WHERE CONVERT(DATE, FECHA_HORA) = '20/09/2023'
+    AND SUCURSAL = 'CAPILLA'
+    ORDER BY MOVIMIENTOS.FECHA_HORA DESC
